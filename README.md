@@ -1,76 +1,65 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/w4gGfuWk)
-#  RL-Class-Assignment Documentation
+# Structured Treatment Interruption Strategy for HIV Using Reinforcement Learning
 
-## Project Introduction
+This project involves designing a reinforcement learning (RL) agent to optimize a structured treatment interruption strategy for an HIV-infected patient. The simulator class, `HIVPatient`, follows the Gymnasium interface and provides functions to simulate the patient's immune system, allowing the RL agent to make treatment decisions every 5 days over a maximum of 200 time steps. The goal is to maintain the patient's health by balancing drug administration with the natural immune response, while minimizing pharmaceutical side effects and avoiding drug resistance.
 
-### Overview
+## Project Structure
 
-Welcome to the Reinforcement Learning Class Assignment project repository! This project is designed to provide you with hands-on experience in developing reinforcement learning (RL) agents. You will engage with essential components of an RL system, implementing policies to solve RL environments. This repository serves as your starting point, containing the foundational structure and files necessary for the assignment.
-  
-### Repository Structure
+- `HIVPatient.py`: Contains the simulator class for the HIV patient's immune system.
+- `train_agent.py`: Script to train the RL agent using the `HIVPatient` simulator.
+- `evaluate_agent.py`: Script to evaluate the performance of the trained RL agent.
+- `saved_models/`: Directory to store the trained RL agent models.
+- `README.md`: Project overview and instructions.
 
-The repository is organized as follows to facilitate your development process:
+## Getting Started
+
+### Prerequisites
+
+To run this project, the following Python packages are required:
+
+- gymnasium
+- numpy
+- torch (for deep learning models)
+- matplotlib (for plotting results)
+
+You can install these packages using pip:
+
+```bash
+pip install gymnasium numpy torch matplotlib
 ```
-├── README.md 
-├── requirement.txt # Lists all the necessary dependencies to set up your development environment. (DO NOT REMOVE PYTEST [*])
-└── src
-    ├── env_hiv.py # Defines the simulation environment your agent will interact with. (DO NOT MODIFY [**])
-    ├── evaluate.py # Contains the evaluation function to assess your agent's performance. (DO NOT MODIFY [**])
-    ├── interface.py # Provides the agent interface, outlining the methods your agent must implement. (DO NOT MODIFY [**])
-    ├── train.py # Training script. (YOUR CODE GOES HERE)
-    └── main.py # Serves as the entry point for automatically evaluating your agent. (DO NOT MODIFY [**])
+
+### Training the RL Agent
+
+To train the RL agent, run the `train_agent.py` script. This script initializes the `HIVPatient` simulator, sets up the RL agent, and trains it over a series of episodes.
+
+```bash
+python train_agent.py
 ```
 
-\[*\] `pytest` is necessary to the automated evaluation system, don't remove this dependency. Add however any dependency that is necessary to run your agent.  
-\[**\] Modifying these files will break the automated evaluation system and assign a grade of zero : don't do it, really.
+The training process will output the progress and save the trained model in the `saved_models/` directory.
 
-### Assignment Task
+### Evaluating the RL Agent
 
-Your primary task is to create and integrate a training script named `train.py` within this framework. This script should encompass the training logic for your agent, adhering to the specifications outlined in the `interface.py` file. Specifically, you are expected to:
+To evaluate the performance of the trained RL agent, run the `evaluate_agent.py` script. This script loads the trained model and tests it on the `HIVPatient` simulator, providing performance metrics and visualizing the results.
 
-- Develop an `Agent` class that conforms to the protocol defined in `interface.py`. This class should encapsulate the functionality for your agent, including the ability to:
-  - Decide on actions based on observations from the environment.
-  - Save what it has learned to disk.
-  - Load a previously saved model for further inference or evaluation.
+```bash
+python evaluate_agent.py
+```
 
-You should run your training locally (on your laptop, using colab, etc. as you prefer), then save your model and push both your code and your saved model to your GitHub Classroom repo.
+### Project Files
 
-### Evaluation process
+- **HIVPatient.py**: Implements the `HIVPatient` class, simulating the HIV patient's immune system based on a system of deterministic non-linear equations.
+- **train_agent.py**: Contains the training loop for the RL agent. This script initializes the environment and agent, and trains the agent using a selected RL algorithm.
+- **evaluate_agent.py**: Evaluates the trained RL agent by simulating its performance on the `HIVPatient` environment. Outputs metrics and visualizations to assess the agent's effectiveness.
+- **saved_models/**: Directory where trained models are saved for future use and evaluation.
+- **README.md**: Provides an overview of the project, installation instructions, and guidance on training and evaluating the RL agent.
 
-When you push to your GitHub Classroom repo, GitHub Classroom will automatically trigger a series of actions, one of which involves running the `main.py` script. The `main.py` script acts as the entry point for evaluating your RL agent. It is designed to instantiate your agent, interact with the environment, and report the agent's scores which participate in the final grade.
+### Notes
 
-### The problem to solve
+- The simulator allows for domain randomization by setting `domain_randomization=True` in the `HIVPatient` constructor. This feature can be used to test the agent on a variety of patient profiles.
+- The reward model encourages high values of HIV-specific cytotoxic cells (E) and low values of free virus particles (V), while penalizing drug prescriptions to promote a balanced treatment strategy.
 
-This challenge is inspired by the 2006 paper by Ernst et al. titled "[Clinical data based optimal STI strategies for HIV: a reinforcement learning approach](https://ieeexplore.ieee.org/abstract/document/4177178)". It is based on the 2004 simulation model of Adams et al. published in the "[Dynamic Multidrung Therapies for HIV: Optimal and STI Control Approaches](https://www.aimspress.com/fileOther/PDF/MBE/1551-0018_2004_2_223.pdf)" paper.  
-You don't have to read these papers (although the first might be a great inspiration for your work, while the second might provide better insights as to the physical quantities manipulated). In particular, your agent doesn't have to mimic that of Ernst et al.! Feel free to be creative and develop your own solution (FQI, DQN, evolutionary search, policy gradients: your choice).
+## Conclusion
 
-You are provided with the simulator class `HIVPatient` of an HIV infected patient's immune system. This simulator follows the Gymnasium interface and provides the usual functions. Your goal is to design a closed-loop control strategy which performs structured treatment interruption, ie. a control strategy which keeps the patient healthy while avoiding prescribing drugs at every time step. 
+This project demonstrates the application of reinforcement learning to optimize structured treatment interruption strategies for HIV. By carefully balancing drug administration with the patient's natural immune response, the RL agent aims to maintain the patient's health and minimize side effects.
 
-The `HIVPatient` class implements a simulator of the patient's immune system through 6 state variables, which are observed every 5 days (one time step):
-- `T1` number of healthy type 1 cells (CD4+ T-lymphocytes), 
-- `T1star` number of infected type 1 cells,
-- `T2` number of healthy type 2 cells (macrophages),
-- `T2star` number of infected type 2 cells,
-- `V` number of free virus particles,
-- `E` number of HIV-specific cytotoxic cells (CD8 T-lymphocytes).
-
-The physician can prescribe two types of drugs:
-- Reverse transcriptase inhibitors, which prevent the virus from modifying an infected cell's DNA,
-- Protease inhibitors, which prevent the cell replication mechanism.
-
-Giving these drugs systematically is not desirable. First, it prevents the immune system from naturally fighting the infection. Second, it might induce drug resistance by the infection. Third, it causes many pharmaceutical side effects which may lead the patient to abandon treatment.  
-There are four possible choices for the physician at each time step: prescribe nothing, one drug, or both.
-
-The reward model encourages high values of `E` and low values of `V`, while penalizing giving drugs.
-
-The patient's immune system is simulated via a system of deterministic non-linear equations.
-
-By default, the `HIVPatient` class' constructor instantiates always the same patient (the one whose immune system was clinically identified by Adams et al.). However, calling `HIVPatient(domain_randomization=True)` draws a random patient uniformly.
-
-Your task is to write, train, and save an RL agent which interacts with the default patient for at most 200 time steps and optimizes a structured treatment interruption strategy.
-
-### Grading
-
-The final grade, out of nine points, is made of two parts.  
-First, your agent will be evaluated on the default patient. There are six score thresholds: every time your agent passes a threshold, you gain one point.  
-Then, your agent will be evaluated on the population of patients. There are three score thresholds: every time your agent passes a threshold, you gain another point.  
+Feel free to contribute to this project by improving the RL algorithms, experimenting with different reward models, or enhancing the simulation environment.
